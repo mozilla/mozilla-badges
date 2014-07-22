@@ -3,9 +3,9 @@ import os
 from setuptools import setup, find_packages
 
 
-setup(name='project',
+setup(name='mozbadges',
       version='1.0',
-      description='Django application.',
+      description='Mozilla Badges.',
       long_description='',
       author='',
       author_email='',
