@@ -1,17 +1,11 @@
-playdoh
-=======
+# Mozilla Badges
 
-Mozilla's Playdoh is a web application template based on [Django][django].
-
-Patches are welcome! Feel free to fork and contribute to this project on
-[github][gh-playdoh].
-
-Full [documentation][docs] is available as well.
-
+Mozilla Badges is a badge service based on [Playdoh][playdoh], a [Django][django ] deriviative. This is currently a new development, but you can find the live [badges.mozilla.org][bmo] code [elsewhere on GitHub][gh-bmo].
 
 [django]: http://www.djangoproject.com/
-[gh-playdoh]: https://github.com/mozilla/playdoh
-[docs]: http://playdoh.rtfd.org/
+[playdoh]: https://github.com/mozilla/playdoh
+[bmo]: https://badges.mozilla.org
+[gh-bmo]: https://github.com/mozilla/badges.mozilla.org
 
 
 License
