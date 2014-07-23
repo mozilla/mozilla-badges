@@ -35,7 +35,7 @@ class JSONResponseMixin(object):
                 data['$'+_('previous')] = self.get_page_link(page_obj.previous_page_number())
             if page_obj.has_next():
                 data['$'+_('next')] = self.get_page_link(page_obj.next_page_number())
-        except KeyError:
+        except (KeyError, AttributeError,):
             # If no pagination is in use, ignore it
             pass
 
