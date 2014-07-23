@@ -1,10 +1,19 @@
 from django import http
 from django.db.models import Model
 from django.db.models.query import QuerySet
-from django.utils import simplejson as json
-from django.utils.translation import ugettext as _
 from urllib import urlencode
 from urlparse import urlunparse
+
+try:
+    import django.utils.simplejson as json
+except ImportError: # Django 1.5 no longer bundles simplejson
+    import json
+
+try:
+    from tower import ugettext_lazy as _
+except ImportError:
+    from django.utils.translation import ugettext_lazy as _
+
 
 
 class JSONResponseMixin(object):
