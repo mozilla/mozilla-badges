@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import patterns, url
 
-from mozbadges.utils.views import placeholder_view
+from mozbadges.views import placeholder_view
 
 
 urlpatterns = patterns('',
