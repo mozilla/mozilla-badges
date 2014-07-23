@@ -15,7 +15,7 @@ class JSONResponseMixin(object):
     def get_json_response(self, content, **httpresponse_kwargs):
         "Construct an `HttpResponse` object."
         return http.HttpResponse(content,
-                                 content_type='application.json',
+                                 content_type='application/json',
                                  **httpresponse_kwargs)
 
     def convert_context_to_json(self, context):
@@ -35,7 +35,7 @@ class JSONResponseMixin(object):
                 data['$'+_('previous')] = self.get_page_link(page_obj.previous_page_number())
             if page_obj.has_next():
                 data['$'+_('next')] = self.get_page_link(page_obj.next_page_number())
-        except AttributeError as e:
+        except KeyError:
             # If no pagination is in use, ignore it
             pass
 
