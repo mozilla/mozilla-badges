@@ -1,4 +1,5 @@
 from django import http
+from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models import Model
 from django.db.models.query import QuerySet
 from urllib import urlencode
@@ -10,10 +11,16 @@ except ImportError: # Django 1.5 no longer bundles simplejson
     import json
 
 try:
-    from tower import ugettext_lazy as _
+    from tower import ugettext as _
 except ImportError:
-    from django.utils.translation import ugettext_lazy as _
+    from django.utils.translation import ugettext as _
 
+from mozbadges.utils.serializers.public import Serializer
+
+
+def serialize(data):
+    s = Serializer()
+    return s.serialize(data)
 
 
 class JSONResponseMixin(object):
@@ -32,7 +39,7 @@ class JSONResponseMixin(object):
         data_key = self.context_object_name
         data = {
             '$'+_('data'): data_key,
-            data_key: context.get(data_key)
+            data_key: serialize(context.get(data_key))
         }
 
         try:
@@ -48,7 +55,7 @@ class JSONResponseMixin(object):
             # If no pagination is in use, ignore it
             pass
 
-        return json.dumps(data, default=self.complex_dumps_default)
+        return json.dumps(data, cls=DjangoJSONEncoder)
 
     def get_page_link(self, page):
         path = self.request.path
@@ -58,15 +65,3 @@ class JSONResponseMixin(object):
         else:
             query['page'] = page
         return urlunparse(('', '', path, '', urlencode(query), ''))
-
-    def complex_dumps_default(self, obj):
-        if isinstance(obj, QuerySet):
-            return list(obj)
-
-        # This needs a bit of work - rather naive object dump
-        if isinstance(obj, Model):
-            return dict(((key, value) for key, value in obj.__dict__.iteritems() if not key.startswith('_')))
-
-        return str(type(obj))
-
-
