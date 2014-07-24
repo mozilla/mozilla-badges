@@ -1,7 +1,6 @@
 from django import http
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models import Model
-from django.db.models.query import QuerySet
 from urllib import urlencode
 from urlparse import urlunparse
 
@@ -20,6 +19,10 @@ from mozbadges.utils.serializers.public import Serializer
 
 def serialize(data):
     s = Serializer()
+
+    if isinstance(data, Model):
+        # Django serializers don't do well with single instances, unfortunately
+        return s.serialize([data]).pop()
     return s.serialize(data)
 
 

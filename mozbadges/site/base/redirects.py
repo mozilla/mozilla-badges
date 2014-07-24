@@ -7,7 +7,7 @@ def redirect (from_url, to_url, **defaults):
         params = {}
         params.update(defaults)
         params.update(dict((key, value) for key, value in kwargs.items() if value is not None))
-        return HttpResponsePermanentRedirect(url.format(**params))
+        return HttpResponsePermanentRedirect(to_url.format(**params))
     return (from_url, redirect,)
 
 
