@@ -44,7 +44,9 @@ JINGO_EXCLUDE_APPS = (
 
 # BrowserID configuration
 AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',
+    # This is a wrapper around `django.contrib.auth.backends.ModelBackend`,
+    # but uses our proxied Person model instead of a regular User
+    'mozbadges.auth.backends.PersonModelBackend',
     'django_browserid.auth.BrowserIDBackend',
 )
 
