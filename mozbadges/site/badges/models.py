@@ -4,8 +4,6 @@ from django.conf import settings
 from django_roa import Model as ROAModel
 from rest_framework import serializers
 
-import traceback
-
 class Badge (ROAModel):
     timeUnitChoices = (
       ('minutes', 'Minutes'),
