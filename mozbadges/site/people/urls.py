@@ -6,14 +6,20 @@ import views
 
 urlpatterns = patterns('',
     (r'^people', include(patterns('',
+        # /people.json
+        url(r'^\.json$', views.person_list, name='json'),
+
         (r'^/', include(patterns('',
             # /people/
-            url(r'^$', placeholder_view, name='all'),
+            url(r'^$', views.person_list, name='all'),
 
-            (r'^(?P<person>[^ /]+)', include(patterns('',
+            (r'^(?P<person>[^ /\.]+)', include(patterns('',
+                # /people/{person}.json
+                url(r'^\.json$', views.person_detail, name='json'),
+
                 (r'^/', include(patterns('',
                     # /people/{person}/
-                    url(r'^$', placeholder_view, name='detail'),
+                    url(r'^$', views.person_detail, name='detail'),
 
                     (r'^badges', include(patterns('',
                         # /people/{person}/badges/

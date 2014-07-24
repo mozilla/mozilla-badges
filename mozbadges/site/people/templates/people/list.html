@@ -1,0 +1,9 @@
+{% extends "people/base.html" %}
+
+{% block body %}
+<ul>
+    {% for person in people %}
+        <li><a href="{{ person.get_absolute_url() }}">{{ person }}</a></li>
+    {% endfor %}
+</ul>
+{% endblock body %}
