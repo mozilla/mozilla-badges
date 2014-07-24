@@ -1,7 +1,5 @@
 from django.conf.urls.defaults import patterns, url
 
-from mozbadges.views import placeholder_view
-
 import views
 
 
