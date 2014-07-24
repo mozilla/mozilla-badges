@@ -1,11 +1,119 @@
 <!DOCTYPE html>
 <html lang="{{ LANG }}" dir="{{ DIR }}">
-    <head>
-        {% block head %}
-        {% endblock head %}
-    </head>
-    <body>
-        {% block body %}
-        {% endblock body %}
-    </body>
+    {% block html %}
+        <head>
+            {% block head %}
+                <meta charset="utf-8">
+                <title>{% block title -%}
+                    {%- if TITLE %}{{ TITLE | striptags }}
+                        {% if page_obj and (page_obj.paginator.num_pages > 1) %}
+                            ({{ _('Page {page} of {num_pages}') | f(page=page_obj.number, num_pages=page_obj.paginator.num_pages) }})
+                        {% endif %}
+                        -
+                    {% endif %}
+                    Mozilla Badges
+                {%- endblock title %}</title>
+                <link rel="shortcut icon" href="//mozorg.cdn.mozilla.net/media/img/favicon.ico">
+                {% block css %}
+                    {% compress css %}
+                    {% endcompress %}
+                    <link rel="stylesheet" media="screen,projection,tv" href="//mozorg.cdn.mozilla.net/media/css/tabzilla-min.css?build=61d5d5c">
+                    <link rel="stylesheet" media="all" href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+                {% endblock css %}
+                <!--[if lte IE 8]>
+                    <script src="//mozorg.cdn.mozilla.net/media/js/libs/html5shiv.js"></script>
+                <![endif]-->
+            {% endblock head %}
+        </head>
+        <body id="{% block pageid -%}
+            {% if PAGE_ID %}{{ PAGE_ID }}{% endif %}
+        {%- endblock %}" class="html-{{ DIR }} {% block bodyclass -%}
+            {% if PAGE_CLASS %}{{ PAGE_CLASS }}{% endif %}
+        {%- endblock %}">
+            {% block body %}
+                <div id="access-nav">
+                    <a href="#content" id="skip-main">{{ _('Skip to content') }}</a>
+                    <a href="#navigation" id="skip-nav">{{ _('Skip to main menu') }}</a>
+                </div>
+                {% block outer_page %}
+                    <div id="outer-wrapper">
+                        <div id="wrapper">
+                            {% block page %}
+                                {% block outer_header %}
+                                    <header id="masthead" role="banner">
+                                        {% block inner_header %}
+                                            <div class="constrained">
+                                                {% block header %}
+                                                    {% block site_title %}
+                                                        <h1 class="title">
+                                                            <a href="http://www.mozilla.org/" id="tabzilla" aria-label="Mozilla links">Mozilla</a>
+                                                            <a href="{{ url('home') }}" id="nav-home">Badges</a>
+                                                        </h1>
+                                                    {% endblock site_title %}
+                                                    {% block navigation %}
+                                                        <div class="navigation">
+                                                            <nav id="navigation" class="menu" role="navigation">
+                                                                <ul>
+                                                                    <li><a href="{{ url('badges:all') }}">{{ _('Badges') }}</a></li>
+                                                                    <li><a href="{{ url('teams:all') }}">{{ _('Teams') }}</a></li>
+                                                                    {% if request.user.is_staff -%}
+                                                                        <li><a href="{{ url('admin:index') }}">{{ _('Admin') }}</a></li>
+                                                                    {%- endif %}
+                                                                    <li><a href="">{{ _('About') }}</a></li>
+                                                                    <li><a href="">{{ _('Help') }}</a></li>
+                                                                </ul>
+                                                            </nav>
+                                                            <p class="user">
+                                                                {%- if request.user.is_authenticated() -%}
+                                                                    {%- trans url=request.user.get_absolute_url(), name=request.user -%}
+                                                                        Welcome, <a class="signed-in-user" href="{{url}}">{{name}}</a>
+                                                                    {%- endtrans -%}
+                                                                {%- else -%}
+                                                                    <a href="">{{ _('Sign In') }}</a>
+                                                                {%- endif -%}
+                                                            </p>
+                                                        </div>
+                                                    {% endblock %}
+                                                {% endblock header %}
+                                            </div>
+                                        {% endblock inner_header %}
+                                    </header>
+                                {% endblock outer_header %}
+                                {% block outer_content %}
+                                    <main id="content" role="main">
+                                        {% block inner_content %}
+                                            <div class="constrained">
+                                                {% block page_title_wrapper %}
+                                                    <h2>{% block page_title -%}
+                                                        {% if TITLE %}{{ TITLE }}{% endif %}
+                                                    {%- endblock page_title %}</h2>
+                                                {% endblock page_title_wrapper %}
+                                                {% block content %}
+                                                {% endblock content %}
+                                            </div>
+                                        {% endblock inner_content %}
+                                    </main>
+                                {% endblock outer_content %}
+                                {% block outer_footer %}
+                                    <footer id="footer" role="contentinfo">
+                                        {% block inner_foooter %}
+                                            <div class="constrained">
+                                                {% block footer %}
+                                                {% endblock footer %}
+                                            </div>
+                                        {% endblock %}
+                                    </footer>
+                                {% endblock outer_footer %}
+                            {% endblock page %}
+                        </div>
+                    </div>
+                {% endblock outer_page %}
+                {% block js %}
+                    {% compress js %}
+                    {% endcompress %}
+                    <script src="//mozorg.cdn.mozilla.net/en-US/tabzilla/tabzilla.js?build=61d5d5c"></script>
+                {% endblock %}
+            {% endblock body %}
+        </body>
+    {% endblock %}
 </html>

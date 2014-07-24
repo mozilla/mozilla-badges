@@ -1,17 +1,17 @@
 from django.conf.urls.defaults import patterns, url
 
-from mozbadges.views import placeholder_view
+import views
 
 
 urlpatterns = patterns('',
     # /
-    url(r'^$', placeholder_view, name='home'),
+    url(r'^$', views.home, name='home'),
     # /create/
-    url(r'^create/$', placeholder_view, name='create'),
+    url(r'^create/$', views.create, name='create'),
     # /claim/
-    url(r'^claim/$', placeholder_view, {'code': None}, name='claim'),
+    url(r'^claim/$', views.claim, {'code': None}, name='claim'),
     # /claim/{code}/
-    url(r'^claim/(?P<code>[^/]+)/$', placeholder_view, name='claim_code'),
+    url(r'^claim/(?P<code>[^/]+)/$', views.claim, name='claim_code'),
     # /studio/
-    url(r'^studio/$', placeholder_view, name='studio'),
+    url(r'^studio/$', views.studio, name='studio'),
 )
