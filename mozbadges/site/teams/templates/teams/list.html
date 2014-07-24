@@ -1,9 +1,9 @@
 {% extends "teams/base.html" %}
 
-{% block body %}
+{% block content %}
     <ul>
         {% for team in object_list %}
             <li><a href="{{ team.get_absolute_url() }}">{{ team }}</a></li>
         {% endfor %}
     </ul>
-{% endblock body %}
+{% endblock content %}
