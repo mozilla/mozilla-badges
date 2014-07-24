@@ -6,9 +6,9 @@ import urlparse
 from . import *
 
 class JWTAuthFilter(object):
-    def __init__(self):
-        self.key = BADGEKIT_API_AUTH['key']
-        self.secret = BADGEKIT_API_AUTH['secret']
+    def __init__(self, key, secret):
+        self.key = key 
+        self.secret = secret
 
     def on_request(self, request):
         url = urlparse.urlparse(request.url)
@@ -44,4 +44,4 @@ class JWTAuthFilter(object):
 
         return request
 
-ROA_FILTERS = [ JWTAuthFilter(), ]
+ROA_FILTERS = [ JWTAuthFilter(BADGEKIT_API_AUTH['key'], BADGEKIT_API_AUTH['secret']) ]
