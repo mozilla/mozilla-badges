@@ -1,0 +1,7 @@
+{% extends "badges/base.html" %}
+
+{% block content %}
+    <h1>{{ badge.name }}</h1>
+    <img src="{{ badge.imageUrl }}">
+    <p>Description: {{ badge.earnerDescription }}</p>
+{% endblock content %}

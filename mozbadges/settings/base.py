@@ -14,6 +14,8 @@ ROOT_URLCONF = '%s.urls' % PROJECT_MODULE
 
 INSTALLED_APPS = list(INSTALLED_APPS) + [
     # Application base, containing global templates.
+    'django_roa',
+    
     '%s.site.account' % PROJECT_MODULE,
     '%s.site.auth' % PROJECT_MODULE,
     '%s.site.badges' % PROJECT_MODULE,

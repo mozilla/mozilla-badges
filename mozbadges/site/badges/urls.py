@@ -7,19 +7,19 @@ import views
 urlpatterns = patterns('',
     (r'^badges', include(patterns('',
         # /badges.json
-        url(r'^\.json$', placeholder_view, name='json'),
+        url(r'^\.json$', views.badge_list, name='json'),
 
         (r'^/', include(patterns('',
             # /badges/
-            url(r'^$', placeholder_view, name='all'),
+            url(r'^$', views.badge_list, name='all'),
 
-            (r'^(?P<badge>[\w-]+)', include(patterns('',
+            (r'^(?P<slug>[\w-]+)', include(patterns('',
                 # /badges/{badge}.json
-                url(r'^\.json$', placeholder_view, name='json'),
+                url(r'^\.json$', views.badge_detail, name='json'),
 
                 (r'^/', include(patterns('',
                     # /badges/{badge}/
-                    url(r'^$', placeholder_view, name='detail'),
+                    url(r'^$', views.badge_detail, name='detail'),
 
                     # /badges/{badge}/apply/
                     url(r'^apply/$', placeholder_view, name='apply'),
