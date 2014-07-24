@@ -8,7 +8,16 @@ from mozbadges.utils.decorators import public_attributes
 class Person (User):
     class Meta:
         proxy = True
-        verbose_name_plural = "people"
+        verbose_name_plural = 'people'
+
+    def __str__ (self):
+        return str(self.get_display_name())
+
+    def __unicode__ (self):
+        return unicode(self.get_display_name())
+
+    def get_display_name (self):
+        return self.first_name or self.username
 
     @models.permalink
     def get_absolute_url (self):

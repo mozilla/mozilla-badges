@@ -65,7 +65,7 @@
                                                             </nav>
                                                             <p class="user">
                                                                 {%- if request.user.is_authenticated() -%}
-                                                                    {%- trans url=request.user.get_absolute_url(), name=request.user -%}
+                                                                    {%- trans url=url('account:home'), name=request.user -%}
                                                                         Welcome, <a class="signed-in-user" href="{{url}}">{{name}}</a>
                                                                     {%- endtrans -%}
                                                                 {%- else -%}
