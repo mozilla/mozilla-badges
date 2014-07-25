@@ -305,11 +305,9 @@ class RemoteQuerySet(query.QuerySet):
         # special case, get(id=X) directly request the resource URL and do not
         # filter on ids like Django's ORM do.
         filters = kwargs
-        print kwargs.keys()
         if kwargs.keys() == []:
             filters = self.query.filters
 
-        print filters.keys()
         # keep the custom attribute name of model for later use
         custom_pk = self.model._meta.pk.attname
         # search PK, ID or custom PK attribute name for exact match and get set
