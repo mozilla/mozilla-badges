@@ -1,0 +1,24 @@
+{% extends "account/base.html" %}
+
+{% block outer_userbar %}
+{% endblock outer_userbar %}
+
+{% block content %}
+<p>{{ _('Let us know a little bit about you before you get started.') }}</p>
+{% if profile_link %}
+    <p>{% trans profile=profile_link -%}
+        We pulled some of your information from <a href="{{profile}}">your profile on mozillians.org</a> to get you going.
+        If you don't want us to use this information, feel free to remove or alter it.
+    {%- endtrans %}</p>
+{% endif %}
+<form action="" method="post">
+    {{ csrf() }}
+    <ul>
+        {{ form.as_ul() }}
+    </ul>
+    <p class="actions">
+        <button type="submit" name="action" value="accept">OK!</button>
+        <button type="submit" name="action" value="skip">Skip this step</button>
+    </p>
+</form>
+{% endblock content %}

@@ -1,5 +1,7 @@
 -r ../vendor/src/funfactory/funfactory/requirements/prod.txt
 
+South==1.0
+django-constance==0.6
 http://effbot.org/media/downloads/PIL-1.1.7.tar.gz#egg=PIL
 django-piston==0.2.3
 restkit==4.1.2

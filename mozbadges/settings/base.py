@@ -12,18 +12,24 @@ PROJECT_MODULE = 'mozbadges'
 # Defines the views served for root URLs.
 ROOT_URLCONF = '%s.urls' % PROJECT_MODULE
 
+TEMPLATE_CONTEXT_PROCESSORS = list(TEMPLATE_CONTEXT_PROCESSORS) + [
+    'constance.context_processors.config',
+]
+
 INSTALLED_APPS = list(INSTALLED_APPS) + [
     # Application base, containing global templates.
     'django_roa',
     
     '%s.site.account' % PROJECT_MODULE,
-    '%s.site.auth' % PROJECT_MODULE,
     '%s.site.badges' % PROJECT_MODULE,
     '%s.site.base' % PROJECT_MODULE,
     '%s.site.people' % PROJECT_MODULE,
     '%s.site.teams' % PROJECT_MODULE,
 
+    'south',
     'django.contrib.admin',
+    'constance',
+    'constance.backends.database',
 ]
 
 # Note! If you intend to add `south` to INSTALLED_APPS,
@@ -46,17 +52,23 @@ JINGO_EXCLUDE_APPS = (
 
 # BrowserID configuration
 AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',
+    # This is a wrapper around `django.contrib.auth.backends.ModelBackend`,
+    # but uses our proxied Person model instead of a regular User
     'django_browserid.auth.BrowserIDBackend',
+    'mozbadges.auth.backends.PersonModelBackend',
 )
 
 LOGIN_URL = '/'
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = 'account:welcome'
 LOGIN_REDIRECT_URL_FAILURE = '/'
+
+BROWSERID_VERIFY_CLASS = 'mozbadges.auth.views.Verify'
 
 TEMPLATE_CONTEXT_PROCESSORS += (
     # other possible context processors here...
 )
+
+AUTH_USER_MODEL = 'people.Person'
 
 # Should robots.txt deny everything or disallow a calculated list of URLs we
 # don't want to be crawled?  Default is false, disallow everything.
@@ -102,3 +114,35 @@ LOGGING = {
         }
     }
 }
+
+CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
+CONSTANCE_DATABASE_CACHE_BACKEND = 'default'
+
+CONSTANCE_CONFIG = dict(
+    MOZILLIANS_API_BASE_URL = (
+        'https://mozillians.org/api/v1',
+        'Mozillians.org API base URL',
+    ),
+    MOZILLIANS_API_APPNAME = (
+        '',
+        'Mozillians.org API app name',
+    ),
+    MOZILLIANS_API_KEY = (
+        '',
+        'Mozillians.org API key',
+    ),
+    MOZILLIANS_API_CACHE_KEY_PREFIX = (
+        'mozillians_api',
+        'Mozillians.org API result cache key prefix',
+    ),
+    MOZILLIANS_API_CACHE_TIMEOUT = (
+        1800,
+        'Mozillians.org API result cache timeout',
+    ),
+)
+
+def username_algo(email):
+    from mozbadges.auth import generate_username
+    return generate_username(email)
+
+BROWSERID_USERNAME_ALGO = username_algo

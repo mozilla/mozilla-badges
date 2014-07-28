@@ -9,6 +9,9 @@ urlpatterns = patterns('',
         # /account/
         url(r'^$', placeholder_view, name='home'),
 
+        # /account/welcome/
+        url(r'^welcome/$', views.welcome, name='welcome'),
+
         # /account/edit/
         url(r'^edit/$', placeholder_view, name='edit'),
 

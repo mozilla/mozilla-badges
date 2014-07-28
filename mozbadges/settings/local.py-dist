@@ -93,4 +93,3 @@ BADGEKIT_API_AUTH = {
 BADGEKIT_API_SYSTEM = 'badgekit'
 
 ROA_MODELS = True
-
