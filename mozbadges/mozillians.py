@@ -1,7 +1,11 @@
-from django.conf import settings
+from django.core.cache import cache
 from django.core.paginator import Paginator, Page
 from django.utils import six
 
+import constance.config
+
+import hashlib
+import logging
 import urlparse
 import urllib
 import urllib2
@@ -36,21 +40,61 @@ class API:
                 q['offset'] = val
 
             data = self._request(self._path, q)
-            return data['objects']
 
-    def __init__(self, name, key):
+            if data is None:
+                return None
+            elif isinstance(val, slice):
+                return data['objects']
+            else:
+                return data['objects'][0]
+
+    def __init__(self, name=None, key=None, endpoint=None):
         self.name = name
         self.key = key
-        self.endpoint = 'https://mozillians.org/api/v1/'
+        self.endpoint = endpoint
 
-    def _request(self, path, query={}):
-        query['app_name'] = self.name
-        query['app_key'] = self.key
-        url = urlparse.urljoin(self.endpoint, path.lstrip('/'))
-        qs = urllib.urlencode(query)
-        print url, qs
-        req = urllib2.Request('%s?%s' % (url, qs,))
-        return json.load(urllib2.build_opener().open(req))
+    def _request(self, path, query={}, ignore_cache=False):
+        MOZILLIANS_API_BASE_URL = constance.config.MOZILLIANS_API_BASE_URL
+        MOZILLIANS_API_APPNAME = constance.config.MOZILLIANS_API_APPNAME
+        MOZILLIANS_API_KEY = constance.config.MOZILLIANS_API_KEY
+        MOZILLIANS_API_CACHE_KEY_PREFIX = constance.config.MOZILLIANS_API_CACHE_KEY_PREFIX
+        MOZILLIANS_API_CACHE_TIMEOUT = constance.config.MOZILLIANS_API_CACHE_TIMEOUT
+
+        endpoint = self.endpoint or MOZILLIANS_API_BASE_URL
+        app_name = self.name or MOZILLIANS_API_APPNAME
+        app_key = self.key or MOZILLIANS_API_KEY
+
+        if not app_name or not app_key:
+            logging.warning('Missing Mozillians app name or key')
+            return None
+
+        query['app_name'] = app_name
+        query['app_key'] = app_key
+
+        base = urlparse.urljoin(endpoint.rstrip('/') + '/', path.lstrip('/'))
+        qs = urllib.urlencode(sorted([(key, value) for key, value in query.iteritems()]))
+        url = '%s?%s' % (base, qs,)
+
+        cache_key = '%s:%s' % (MOZILLIANS_API_CACHE_KEY_PREFIX,
+                               hashlib.md5(url.encode('utf-8')).hexdigest())
+
+        content = None if ignore_cache else cache.get(cache_key)
+
+        if not content:
+            try:
+                request = urllib2.Request(url)
+                response = urllib2.urlopen(request)
+                content = response.read()
+                cache.set(cache_key, content, MOZILLIANS_API_CACHE_TIMEOUT)
+            except urllib2.URLError as e:
+                logging.error('Mozillians request failed:\n - %s\n - %s', e, url)
+                return None
+
+        try:
+            return json.loads(content)
+        except ValueError as e:
+            logging.error('Parsing Mozillians response failed:\n - %s\n - %s', e, url)
+            return None
 
     def _get_dataset(self, path, page, per_page, query={}):
         q = {}
@@ -59,6 +103,9 @@ class API:
         q['offset'] = (page - 1) * per_page
 
         response = self._request(path, q)
+        if response is None:
+            return None
+
         meta = response['meta']
         objects = response['objects']
 
@@ -85,4 +132,4 @@ class API:
         return self._request('/skills/%d/' % id)
 
 
-api = API(settings.MOZILLIANS_APP_NAME, settings.MOZILLIANS_APP_KEY)
+api = API()

@@ -12,6 +12,10 @@ PROJECT_MODULE = 'mozbadges'
 # Defines the views served for root URLs.
 ROOT_URLCONF = '%s.urls' % PROJECT_MODULE
 
+TEMPLATE_CONTEXT_PROCESSORS = list(TEMPLATE_CONTEXT_PROCESSORS) + [
+    'constance.context_processors.config',
+]
+
 INSTALLED_APPS = list(INSTALLED_APPS) + [
     # Application base, containing global templates.
     '%s.site.account' % PROJECT_MODULE,
@@ -22,6 +26,8 @@ INSTALLED_APPS = list(INSTALLED_APPS) + [
     '%s.site.teams' % PROJECT_MODULE,
 
     'django.contrib.admin',
+    'constance',
+    'constance.backends.database',
 ]
 
 # Note! If you intend to add `south` to INSTALLED_APPS,
@@ -102,3 +108,29 @@ LOGGING = {
         }
     }
 }
+
+CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
+CONSTANCE_DATABASE_CACHE_BACKEND = 'default'
+
+CONSTANCE_CONFIG = dict(
+    MOZILLIANS_API_BASE_URL = (
+        'https://mozillians.org/api/v1',
+        'Mozillians.org API base URL',
+    ),
+    MOZILLIANS_API_APPNAME = (
+        '',
+        'Mozillians.org API app name',
+    ),
+    MOZILLIANS_API_KEY = (
+        '',
+        'Mozillians.org API key',
+    ),
+    MOZILLIANS_API_CACHE_KEY_PREFIX = (
+        'mozillians_api',
+        'Mozillians.org API result cache key prefix',
+    ),
+    MOZILLIANS_API_CACHE_TIMEOUT = (
+        1800,
+        'Mozillians.org API result cache timeout',
+    ),
+)
