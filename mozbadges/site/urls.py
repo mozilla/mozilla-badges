@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import patterns, include
 
-import base, badges, awards, people, teams, account, auth
+import base, badges, awards, people, teams, account
 
 """Most of these apps are ok in their own namespace"""
 urlpatterns = patterns('',
