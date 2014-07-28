@@ -1,9 +1,7 @@
-from django import forms
-
-from models import Community
-from fields import GroupedModelChoiceField
+from django.contrib.auth.forms import UserChangeForm
+from models import Person
 
 
-class CommunityAdminForm(forms.ModelForm):
-    community = GroupedModelChoiceField(group_by_field='parent')
-    
+class PersonAdminForm(UserChangeForm):
+    class Meta:
+        model = Person
