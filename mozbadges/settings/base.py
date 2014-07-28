@@ -25,6 +25,7 @@ INSTALLED_APPS = list(INSTALLED_APPS) + [
     '%s.site.people' % PROJECT_MODULE,
     '%s.site.teams' % PROJECT_MODULE,
 
+    'south',
     'django.contrib.admin',
     'constance',
     'constance.backends.database',
@@ -52,17 +53,21 @@ JINGO_EXCLUDE_APPS = (
 AUTHENTICATION_BACKENDS = (
     # This is a wrapper around `django.contrib.auth.backends.ModelBackend`,
     # but uses our proxied Person model instead of a regular User
-    'mozbadges.auth.backends.PersonModelBackend',
     'django_browserid.auth.BrowserIDBackend',
+    'mozbadges.auth.backends.PersonModelBackend',
 )
 
 LOGIN_URL = '/'
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = 'account:welcome'
 LOGIN_REDIRECT_URL_FAILURE = '/'
+
+BROWSERID_VERIFY_CLASS = 'mozbadges.auth.views.Verify'
 
 TEMPLATE_CONTEXT_PROCESSORS += (
     # other possible context processors here...
 )
+
+AUTH_USER_MODEL = 'people.Person'
 
 # Should robots.txt deny everything or disallow a calculated list of URLs we
 # don't want to be crawled?  Default is false, disallow everything.
@@ -134,3 +139,9 @@ CONSTANCE_CONFIG = dict(
         'Mozillians.org API result cache timeout',
     ),
 )
+
+def username_algo(email):
+    from mozbadges.auth import generate_username
+    return generate_username(email)
+
+BROWSERID_USERNAME_ALGO = username_algo

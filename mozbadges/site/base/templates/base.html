@@ -16,6 +16,7 @@
                 <link rel="shortcut icon" href="//mozorg.cdn.mozilla.net/media/img/favicon.ico">
                 {% block css %}
                     {% compress css %}
+                        <link rel="stylesheet" media="all" href="{{ static('browserid/persona-buttons.css') }}">
                     {% endcompress %}
                     <link rel="stylesheet" media="screen,projection,tv" href="//mozorg.cdn.mozilla.net/media/css/tabzilla-min.css?build=61d5d5c">
                     <link rel="stylesheet" media="all" href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
@@ -31,6 +32,7 @@
             {% if PAGE_CLASS %}{{ PAGE_CLASS }}{% endif %}
         {%- endblock %}">
             {% block body %}
+                {{ persona_info() }}
                 <div id="access-nav">
                     <a href="#content" id="skip-main">{{ _('Skip to content') }}</a>
                     <a href="#navigation" id="skip-nav">{{ _('Skip to main menu') }}</a>
@@ -50,30 +52,48 @@
                                                             <a href="{{ url('home') }}" id="nav-home">Badges</a>
                                                         </h1>
                                                     {% endblock site_title %}
-                                                    {% block navigation %}
+                                                    {% block banner %}
                                                         <div class="navigation">
-                                                            <nav id="navigation" class="menu" role="navigation">
-                                                                <ul>
-                                                                    <li><a href="{{ url('badges:all') }}">{{ _('Badges') }}</a></li>
-                                                                    <li><a href="{{ url('teams:all') }}">{{ _('Teams') }}</a></li>
-                                                                    {% if request.user.is_staff -%}
-                                                                        <li><a href="{{ url('admin:index') }}">{{ _('Admin') }}</a></li>
-                                                                    {%- endif %}
-                                                                    <li><a href="">{{ _('About') }}</a></li>
-                                                                    <li><a href="">{{ _('Help') }}</a></li>
-                                                                </ul>
-                                                            </nav>
-                                                            <p class="user">
-                                                                {%- if request.user.is_authenticated() -%}
-                                                                    {%- trans url=url('account:home'), name=request.user -%}
-                                                                        Welcome, <a class="signed-in-user" href="{{url}}">{{name}}</a>
-                                                                    {%- endtrans -%}
-                                                                {%- else -%}
-                                                                    <a href="">{{ _('Sign In') }}</a>
-                                                                {%- endif -%}
-                                                            </p>
+                                                            {% block outer_navigation %}
+                                                                <nav id="navigation" class="menu" role="navigation">
+                                                                    {% block inner_navigation %}
+                                                                        <ul>
+                                                                            {% block navigation %}
+                                                                                <li><a href="{{ url('badges:all') }}">{{ _('Badges') }}</a></li>
+                                                                                <li><a href="{{ url('teams:all') }}">{{ _('Teams') }}</a></li>
+                                                                                {% if request.user.is_staff -%}
+                                                                                    <li><a href="{{ url('admin:index') }}">{{ _('Admin') }}</a></li>
+                                                                                {%- endif %}
+                                                                                <li><a href="">{{ _('About') }}</a></li>
+                                                                                <li><a href="">{{ _('Help') }}</a></li>
+                                                                            {% endblock navigation %}
+                                                                        </ul>
+                                                                    {% endblock inner_navigation %}
+                                                                </nav>
+                                                            {% endblock outer_navigation %}
+                                                            {% block outer_userbar %}
+                                                                <p class="user">
+                                                                    {% block inner_userbar %}
+                                                                        {% block userbar %}
+                                                                            {%- if request.user.is_authenticated() -%}
+                                                                                {%- block userbar_loggedin -%}
+                                                                                    {%- trans url=url('account:home'), name=request.user, id=request.user.email -%}
+                                                                                        Welcome, <a class="signed-in-user" data-id="{{id}}" href="{{url}}">{{name}}</a>
+                                                                                    {%- endtrans %}
+                                                                                    |
+                                                                                    {{ persona_logout() }}
+                                                                                {%- endblock userbar_loggedin -%}
+                                                                            {%- else -%}
+                                                                                {%- block userbar_loggedout -%}
+                                                                                    {{ persona_login() }}
+                                                                                {%- endblock userbar_loggedout -%}
+                                                                            {%- endif -%}
+                                                                        {% endblock userbar %}
+                                                                    {% endblock inner_userbar %}
+                                                                </p>
+                                                            {% endblock outer_userbar %}
                                                         </div>
-                                                    {% endblock %}
+                                                    {% endblock banner %}
                                                 {% endblock header %}
                                             </div>
                                         {% endblock inner_header %}
@@ -109,7 +129,11 @@
                     </div>
                 {% endblock outer_page %}
                 {% block js %}
+                    <script src="https://login.persona.org/include.js"></script>
                     {% compress js %}
+                        <script src="{{ static('js/lib/jquery-1.11.1.min.js') }}"></script>
+                        <script src="{{ static('browserid/api.js') }}"></script>
+                        <script src="{{ static('browserid/browserid.js') }}"></script>
                     {% endcompress %}
                     <script src="//mozorg.cdn.mozilla.net/en-US/tabzilla/tabzilla.js?build=61d5d5c"></script>
                 {% endblock %}

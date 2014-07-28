@@ -13,5 +13,6 @@ urlpatterns = patterns('',
     (r'', include(teams.urls)),
     
     (r'', include(account.urls)),
-    (r'^account/', include(auth.urls)),
+
+    (r'', include('django_browserid.urls')),
 )
