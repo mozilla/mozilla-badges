@@ -7,3 +7,9 @@
 
 South
 django-constance
+http://effbot.org/media/downloads/PIL-1.1.7.tar.gz#egg=PIL
+django-piston==0.2.3
+restkit==4.1.2
+wsgiref==0.1.2
+PyJWT==0.2.1
+djangorestframework==2.3.14

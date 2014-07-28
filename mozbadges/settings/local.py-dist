@@ -85,5 +85,11 @@ ENGAGE_ROBOTS = True
 # HTTPS to disable HTTPS-only cookies.
 #SESSION_COOKIE_SECURE = False
 
-MOZILLIANS_APP_NAME = ''
-MOZILLIANS_APP_KEY = ''
+BADGEKIT_API_ENDPOINT = 'https://badgekit-api-mozilla.mofostaging.org'
+BADGEKIT_API_AUTH = {
+  'key': 'key',
+  'secret': 'secret'
+}
+BADGEKIT_API_SYSTEM = 'badgekit'
+
+ROA_MODELS = True
