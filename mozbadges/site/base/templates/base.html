@@ -1,3 +1,4 @@
+{% if (not TITLE) and page_title %}{% set TITLE = page_title %}{% endif -%}
 <!DOCTYPE html>
 <html lang="{{ LANG }}" dir="{{ DIR }}">
     {% block html %}
