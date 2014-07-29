@@ -1,0 +1,137 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.constrained {
+  max-width: 940px;
+  margin: 0 auto;
+  padding: 0 30px;
+  position: relative;
+}
+
+/* ===[ Accessibility nav links ]============================================ */
+
+#access-nav {
+  width: 100%;
+  position: absolute;
+  top: -20em;
+  z-index: 1001;
+  margin: 0;
+  padding: 0;
+}
+
+#access-nav a {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 12px 10px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  font-weight: bold;
+  text-align: center;
+  color: inherit;
+  display: block;
+}
+
+#access-nav a:hover,
+#access-nav a:focus {
+  box-shadow: 3px 3px 5px #AAA;
+  top: 20em;
+  text-decoration: none;
+}
+
+/* ===[ Masthead ]=========================================================== */
+
+#masthead {
+  overflow: hidden;
+}
+
+#masthead .constrained {
+  padding-right: 180px;
+  max-width: 790px;
+}
+
+#masthead .title {
+  margin: 0;
+}
+
+#masthead .org {
+  margin-right: -150px;
+}
+
+#masthead .brand {
+  margin: 35px 0 30px;
+  float: left;
+}
+
+#masthead .navigation {
+  float: right;
+}
+
+#masthead .menu {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  height: 44px;
+  line-height: 44px;
+}
+
+#masthead .menu-item {
+  float: left;
+  text-transform: uppercase;
+  margin-right: 1.43em; /* ~20px */
+}
+
+#masthead .user {
+  margin: 0 -125px 0 0;
+  padding: 10px 0 30px;
+  clear: right;
+  float: right;
+}
+
+#masthead .browserid-login {
+  margin-top: 1em;
+}
+
+#masthead .avatar {
+  width: 50px;
+  height: 50px;
+  margin-right: 1em;
+}
+
+#content .banner::after {
+  content: ".";
+  visibility: hidden;
+  display: block;
+  font-size: 0;
+  clear: both;
+  height: 0;
+}
+
+#content .powerbar-wrapper {
+  float: right;
+  margin-bottom: 1em;
+}
+
+#content .powerbar-content {
+  border-top: solid 0.75em #FFF;
+  padding: 0.75em 2em 1.5em;
+  width: 230px;
+  margin-top: -0.75em;
+}
+
+#content .page-title {
+  margin: 0;
+  font-size: 2.57em;
+  padding: 0.55em 0;
+  float: left;
+}
+
+#content .crumbs {
+  clear: left;
+  margin: 0 0 1.43em;
+}
+
+#content .body {
+  padding: 4.3em 0;
+}
