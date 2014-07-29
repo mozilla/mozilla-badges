@@ -17,6 +17,12 @@ def serialize(data):
     return s.serialize(data)
 
 
+def cleanup_json(data):
+    # Just `unicode` anything that can't otherwise be handled.
+    # Solves the commonest problem of proxied translation strings, if nothing else.
+    return unicode(data)
+
+
 class JSONResponseMixin(object):
     def render_to_response(self, context):
         "Returns a JSON response containing 'context' as payload"
@@ -30,11 +36,17 @@ class JSONResponseMixin(object):
 
     def convert_context_to_json(self, context):
         "Convert passed context into JSON string"
-        data_key = self.context_object_name
-        data = {
-            '$'+_('data'): data_key,
-            data_key: serialize(context.get(data_key))
-        }
+        blacklisted = ['object_list', 'object', 'is_paginated', 'paginator', 'page_obj', 'view']
+        data = dict([(key, value) for key, value in context.iteritems()
+                                    if key not in blacklisted])
+
+        if 'object_list' in context:
+            data_key = self.get_context_object_name(context['object_list']) or 'object_list'
+        elif 'object' in context:
+            data_key = self.get_context_object_name(context['object']) or 'object'
+
+        data['$'+_('data')] = data_key
+        data[data_key] = serialize(context.get(data_key))
 
         try:
             # Add pagination information to data
@@ -49,7 +61,7 @@ class JSONResponseMixin(object):
             # If no pagination is in use, ignore it
             pass
 
-        return json.dumps(data, cls=DjangoJSONEncoder)
+        return json.dumps(data, cls=DjangoJSONEncoder, default=cleanup_json)
 
     def get_page_link(self, page):
         path = self.request.path
