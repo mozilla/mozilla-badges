@@ -6,7 +6,6 @@ import constance.config
 
 import hashlib
 import logging
-import math
 import urlparse
 import urllib
 import urllib2
