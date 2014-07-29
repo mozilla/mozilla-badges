@@ -55,12 +55,18 @@ class Person(AbstractUser):
 
     def get_mozillians_profile(self):
         if not hasattr(self, '_profile'):
-            profiles = mozillians.get_users(email=self.email)
+            profiles = mozillians.get_users(email=self.email, cache_timeout=14400)
             try:
                 self._profile = profiles[0]
             except IndexError:
                 self._profile = None
         return self._profile
+
+    def get_avatar(self, default=None):
+        profile = self.get_mozillians_profile() or {}
+        # Doing it this way handles empty `photo` properties,
+        # as well non-existent ones.
+        return profile.get('photo') or default
 
     def is_vouched(self):
         profile = self.get_mozillians_profile() or {}
