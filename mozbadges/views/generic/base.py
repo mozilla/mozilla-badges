@@ -1,6 +1,7 @@
 from django import http
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models import Model
+from django.utils.text import capfirst
 from urllib import urlencode
 from urlparse import urlunparse
 
@@ -71,3 +72,24 @@ class JSONResponseMixin(object):
         else:
             query['page'] = page
         return urlunparse(('', '', path, '', urlencode(query), ''))
+
+
+class ContextMixin(object):
+    def get_context_data(self, **kwargs):
+        context = {}
+
+        try:
+            context.update(self.context_data)
+        except:
+            pass
+
+        if 'page_title' not in context:
+            if hasattr(self, 'page_title'):
+                context['page_title'] = self.page_title
+            elif hasattr(self, 'model'):
+                context['page_title'] = capfirst(self.model._meta.verbose_name_plural)
+            elif hasattr(self, 'object'):
+                context['page_title'] = unicode(self.object)
+
+        context.update(super(ContextMixin, self).get_context_data(**kwargs))
+        return context

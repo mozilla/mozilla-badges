@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% set BASE_PEOPLE_CRUMBS = [('People', url('people:all'))] %}
+{% set BASE_PEOPLE_CRUMBS = [(_('People'), url('people:all'))] %}
 
 {% if CRUMBS %}
     {% set CRUMBS = BASE_PEOPLE_CRUMBS + CRUMBS %}

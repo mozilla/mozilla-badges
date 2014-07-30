@@ -82,7 +82,7 @@
                                                                         {% block userbar %}
                                                                             {%- if request.user.is_authenticated() -%}
                                                                                 {%- block userbar_loggedin -%}
-                                                                                    <a class="signed-in-user{% if request.user.is_vouched() %} vouched-user{% endif %}" data-id="{{ request.user.email }}" href="{{ url('account:home') }}">
+                                                                                    <a class="signed-in-user{% if request.user.is_vouched() %} vouched-user{% endif %}" data-id="{{ request.user.email }}" href="{{ url('account:dashboard') }}">
                                                                                         <img src="{{ request.user.get_avatar(static('img/default-avatar.jpg')) }}" class="avatar" alt="">{{ request.user }}</a>
                                                                                     | {{ persona_logout() }}
                                                                                 {%- endblock userbar_loggedin -%}

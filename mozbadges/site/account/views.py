@@ -1,23 +1,27 @@
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import redirect, resolve_url
 from django.views.generic.edit import UpdateView
 
-from forms import WelcomeForm
+from forms import WelcomeForm, EditProfileForm
 from mozbadges.site.people.models import Person
+from mozbadges.views.generic.base import ContextMixin
 
 
-class WelcomeView(UpdateView):
+class WelcomeView(ContextMixin, UpdateView):
     model = Person
     template_name = 'account/welcome.html'
     form_class = WelcomeForm
-    success_url = 'home'
+    success_url = reverse_lazy('home')
+    context_data = {'next': reverse_lazy('home')}
+    page_title = 'Welcome'
 
     def get(self, request, *args, **kwargs):
-        if not request.user.is_new:
-            next = request.REQUEST.get(REDIRECT_FIELD_NAME, self.success_url)
-            return redirect(resolve_url(next))
+        # if not request.user.is_new:
+        #     next = request.REQUEST.get(REDIRECT_FIELD_NAME, self.success_url)
+        #     return redirect(resolve_url(next))
 
         request.user.is_new = False
         request.user.save()
@@ -59,3 +63,16 @@ class WelcomeView(UpdateView):
         return super(WelcomeView, self).form_valid(form)
 
 welcome = login_required(WelcomeView.as_view())
+
+
+class EditProfileView(ContextMixin, UpdateView):
+    model = Person
+    template_name = 'account/edit_profile.html'
+    form_class = EditProfileForm
+    success_url = reverse_lazy('account:dashboard')
+    page_title = 'Edit profile'
+
+    def get_object(self, queryset=None):
+        return self.request.user
+
+edit_profile = login_required(EditProfileView.as_view())
