@@ -172,7 +172,6 @@
                     </div>
                 {% endblock outer_page %}
                 {% block js %}
-                    {#
                     <script src="https://login.persona.org/include.js"></script>
                     {% compress js %}
                         <script src="{{ static('js/lib/jquery-1.11.1.min.js') }}"></script>
@@ -180,7 +179,6 @@
                         <script src="{{ static('browserid/browserid.js') }}"></script>
                     {% endcompress %}
                     <script src="//mozorg.cdn.mozilla.net/en-US/tabzilla/tabzilla.js?build=61d5d5c"></script>
-                    #}
                 {% endblock %}
             {% endblock body %}
         </body>
