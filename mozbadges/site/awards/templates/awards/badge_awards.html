@@ -1,0 +1,9 @@
+{% extends "badges/base.html" %}
+
+{% block content %}
+    <ul>
+        {% for award in object_list %}
+            <li>{{ award.badge.name }} badge awarded to {{ award.email }}</li>
+        {% endfor %}
+    </ul>
+{% endblock content %}

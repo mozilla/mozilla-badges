@@ -57,6 +57,10 @@ class Badge (ROAModel):
     def get_json_url (self):
         return ('badges:badge:json', [self.slug])
 
+    @models.permalink
+    def get_awards_absolute_url (self):
+        return ('badges:badge:awards', [self.slug])
+        
     def __unicode__ (self):
         return unicode(self.name)
 

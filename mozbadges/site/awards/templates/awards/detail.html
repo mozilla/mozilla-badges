@@ -1,0 +1,7 @@
+{% extends "awards/base.html" %}
+
+{% block content %}
+    <h1>{{ award.badge.name }} earned by {{ award.email }}</h1>
+    <img src="{{ award.badge.imageUrl }}">
+    <p>Description: {{ award.badge.earnerDescription }}</p>
+{% endblock content %}

@@ -195,7 +195,7 @@ class RemoteQuerySet(query.QuerySet):
         An iterator over the results from applying this QuerySet to the
         remote web service.
         """
-        resource = Resource(self.model.get_resource_url_list(),
+        resource = Resource(self.model.get_resource_url_list(**self.query.filters),
                             filters=ROA_FILTERS, **ROA_SSL_ARGS)
         try:
             parameters = self.query.parameters

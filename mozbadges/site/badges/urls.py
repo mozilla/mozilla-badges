@@ -1,8 +1,7 @@
 from django.conf.urls.defaults import patterns, url, include
-
+from django.conf import settings
 from mozbadges.views import placeholder_view
 import views
-
 
 urlpatterns = patterns('',
     (r'^badges', include(patterns('',
@@ -13,7 +12,7 @@ urlpatterns = patterns('',
             # /badges/
             url(r'^$', views.badge_list, name='all'),
 
-            (r'^(?P<slug>[\w-]+)', include(patterns('',
+            (r'^(?P<badge>[\w-]+)', include(patterns('',
                 # /badges/{badge}.json
                 url(r'^\.json$', views.badge_detail, name='json'),
 
@@ -29,7 +28,7 @@ urlpatterns = patterns('',
                     url(r'^award/$', placeholder_view, name='award'),
 
                     # /badges/{badge}/awards/
-                    url(r'^awards/$', placeholder_view, name='awards'),
+                    url(r'^awards/$', '%s.site.awards.views.badge_award_list' % settings.PROJECT_MODULE, name='awards'),
 
                     # /badges/{badge}/edit/
                     url(r'^edit/$', placeholder_view, name='edit'),

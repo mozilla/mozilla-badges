@@ -1,0 +1,9 @@
+{% extends "awards/base.html" %}
+
+{% block content %}
+    <ul>
+        {% for award in object_list %}
+            <li><a href="{{ award.get_absolute_url() }}">{{ award.badge.name }}</a>  - {{ award.email }}</li>
+        {% endfor %}
+    </ul>
+{% endblock content %}

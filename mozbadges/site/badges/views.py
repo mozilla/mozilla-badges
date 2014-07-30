@@ -5,7 +5,7 @@ from models import Badge
 
 class BadgeDetailView(HybridDetailView):
     model = Badge
-    pk_url_kwarg = 'slug'
+    pk_url_kwarg = 'badge'
     context_object_name = 'badge'
     template_name = 'badges/detail.html'
 

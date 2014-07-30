@@ -1,5 +1,5 @@
 from django.conf.urls.defaults import patterns, url, include
-
+from django.conf import settings
 from mozbadges.views import placeholder_view
 import views
 
@@ -30,9 +30,9 @@ urlpatterns = patterns('',
 
                     (r'^awards', include(patterns('',
                         # /people/{person}/awards/
-                        url(r'^/$', placeholder_view, name='all'),
+                        url(r'^/$', '%s.site.awards.views.badge_award_list' % settings.PROJECT_MODULE, name='all'),
                         # /people/{person}/awards.json
-                        url(r'^\.json$', placeholder_view, name='json'),
+                        url(r'^\.json$', '%s.site.awards.views.badge_award_list' % settings.PROJECT_MODULE, name='json'),
                     ), namespace='awards', app_name='awards')),
                 ))),
             ), namespace='person', app_name='person')),
