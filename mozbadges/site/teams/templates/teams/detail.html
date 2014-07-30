@@ -1,0 +1,11 @@
+{% extends "badges/base.html" %}
+
+{% set TITLE = team %}
+
+{% block content %}
+    <div>
+      <h1>{{ team.name }}</h1>
+      <img src="{{ team.imageUrl }}">
+      <p>Description: {{ team.description }}</p>
+    </div>
+{% endblock content %}

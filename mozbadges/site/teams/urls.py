@@ -1,5 +1,5 @@
 from django.conf.urls.defaults import patterns, url, include
-
+from django.conf import settings
 from mozbadges.views import placeholder_view
 import views
 
@@ -7,22 +7,22 @@ import views
 urlpatterns = patterns('',
     (r'^teams', include(patterns('',
         # /teams.json
-        url(r'^\.json$', placeholder_view, name='json'),
+        url(r'^\.json$', views.team_list, name='json'),
 
         (r'^/', include(patterns('',
             # /teams/
-            url(r'^$', placeholder_view, name='all'),
+            url(r'^$', views.team_list, name='all'),
 
             (r'^(?P<team>[^ /.]+)', include(patterns('',
                 # /teams/{team}.json
-                url(r'\.json$', placeholder_view, name='json'),
+                url(r'\.json$', views.team_detail, name='json'),
 
                 (r'^/', include(patterns('',
                     # /teams/{team}/
-                    url(r'^$', placeholder_view, name='detail'),
+                    url(r'^$', views.team_detail, name='detail'),
 
                     # /teams/{team}/badges/
-                    url(r'^badges/$', placeholder_view, name='badges'),
+                    url(r'^badges/$', '%s.site.badges.views.badge_list' % settings.PROJECT_MODULE, name='badges'),
                     # /teams/{team}/members/
                     url(r'^members/$', placeholder_view, name='members'),
 

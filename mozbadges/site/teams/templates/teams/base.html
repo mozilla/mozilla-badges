@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% set BASE_TEAMS_CRUMBS = [(_('Teams'), url('teams:all'))] %}
+
+{% if CRUMBS %}
+    {% set CRUMBS = BASE_TEAMS_CRUMBS + CRUMBS %}
+{% else %}
+    {% set CRUMBS = BASE_TEAMS_CRUMBS %}
+{% endif %}
