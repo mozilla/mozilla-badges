@@ -17,7 +17,7 @@ class PersonAdmin (admin.ModelAdmin):
     form = PersonAdminForm
 
     fieldsets = (
-        (None, {'fields': ('username', 'password')}),
+        (None, {'fields': ('username', 'password', 'username_changes')}),
         (_('Personal info'), {'fields': ('email', 'display_name', 'bio', 'community')}),
         (_('Status'), {'fields': ('is_active', 'is_staff', 'is_superuser')}),
         (_('Important dates'), {'fields': ('last_login', 'date_joined')}),

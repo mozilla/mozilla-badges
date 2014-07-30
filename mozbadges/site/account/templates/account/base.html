@@ -1,1 +1,9 @@
 {% extends "base.html" %}
+
+{% set BASE_ACCOUNT_CRUMBS = [(_('My Account'), url('account:dashboard'))] %}
+
+{% if CRUMBS %}
+    {% set CRUMBS = BASE_ACCOUNT_CRUMBS + CRUMBS %}
+{% else %}
+    {% set CRUMBS = BASE_ACCOUNT_CRUMBS %}
+{% endif %}

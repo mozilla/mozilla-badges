@@ -1,9 +1,13 @@
+from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 from mozbadges.compat import _
 from mozbadges.mozillians import api as mozillians
 from mozbadges.utils.decorators import public_attributes
+
+
+MAX_USERNAME_CHANGES = getattr(settings, 'PROFILE_MAX_USERNAME_CHANGES', 3)
 
 
 class Community(models.Model):
@@ -43,6 +47,7 @@ class Person(AbstractUser):
     display_name = models.CharField(max_length=50, blank=True)
     community = models.ForeignKey(Community, blank=True, null=True)
     bio = models.TextField(blank=True)
+    username_changes = models.IntegerField(default=0)
 
     class Meta:
         verbose_name_plural = 'people'
@@ -52,6 +57,12 @@ class Person(AbstractUser):
 
     def __unicode__(self):
         return unicode(self.display_name or self.username)
+
+    def username_changes_remaining(self):
+        return MAX_USERNAME_CHANGES - self.username_changes
+
+    def can_change_username(self):
+        return self.username_changes_remaining() > 0
 
     def get_mozillians_profile(self):
         if not hasattr(self, '_profile'):

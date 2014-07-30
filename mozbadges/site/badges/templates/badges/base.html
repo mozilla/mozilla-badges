@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% set BASE_BADGES_CRUMBS = [('Badges', url('badges:all'))] %}
+{% set BASE_BADGES_CRUMBS = [(_('Badges'), url('badges:all'))] %}
 
 {% if CRUMBS %}
     {% set CRUMBS = BASE_BADGES_CRUMBS + CRUMBS %}
