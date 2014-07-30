@@ -14,6 +14,7 @@ ROOT_URLCONF = '%s.urls' % PROJECT_MODULE
 
 TEMPLATE_CONTEXT_PROCESSORS = list(TEMPLATE_CONTEXT_PROCESSORS) + [
     'constance.context_processors.config',
+    'notification.context_processors.notification',
 ]
 
 INSTALLED_APPS = list(INSTALLED_APPS) + [
@@ -28,6 +29,7 @@ INSTALLED_APPS = list(INSTALLED_APPS) + [
 
     'south',
     'django.contrib.admin',
+    'notification',
     'constance',
     'constance.backends.database',
 ]
@@ -63,10 +65,6 @@ LOGIN_REDIRECT_URL = 'account:welcome'
 LOGIN_REDIRECT_URL_FAILURE = '/'
 
 BROWSERID_VERIFY_CLASS = 'mozbadges.auth.views.Verify'
-
-TEMPLATE_CONTEXT_PROCESSORS += (
-    # other possible context processors here...
-)
 
 AUTH_USER_MODEL = 'people.Person'
 

@@ -1,0 +1,14 @@
+{% extends "account/base.html" %}
+
+{% block content %}
+<form action="" method="post">
+    {{ csrf() }}
+    <ul>
+        {{ form.as_ul() }}
+    </ul>
+    <p class="actions">
+        <button type="submit">Update</button>
+        <a href="{{ url('account:dashboard') }}">Cancel</a>
+    </p>
+</form>
+{% endblock content %}

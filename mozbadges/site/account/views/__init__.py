@@ -5,9 +5,11 @@ from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import redirect, resolve_url
 from django.views.generic.edit import UpdateView
 
-from forms import WelcomeForm, EditProfileForm
+from mozbadges.site.account.forms import WelcomeForm, EditProfileForm
 from mozbadges.site.people.models import Person
 from mozbadges.views.generic.base import ContextMixin
+
+import notifications
 
 
 class WelcomeView(ContextMixin, UpdateView):

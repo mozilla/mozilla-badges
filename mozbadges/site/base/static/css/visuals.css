@@ -32,6 +32,19 @@ body {
   color: #FFF;
 }
 
+#masthead .notices:link,
+#masthead .notices:visited {
+  color: #CE001F;
+  font-size: 1.15em;
+  margin-left: 0.25em;
+}
+
+#masthead .no-notices:link,
+#masthead .no-notices:visited {
+  color: rgba(76, 79, 83, 0.25);
+  text-shadow: 1px 1px 1px rgba(255,255,255,0.75);
+}
+
 #masthead a:focus,
 #masthead a:hover {
   text-decoration: underline;
