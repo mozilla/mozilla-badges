@@ -1,7 +1,9 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect, render
+from django.http import HttpResponseRedirect
+from django.shortcuts import redirect, render, get_object_or_404
 from notification.models import Notice
 
+from mozbadges.compat import reverse
 from mozbadges.utils.decorators import render_to
 from mozbadges.views.generic.detail import HybridDetailView
 from mozbadges.views.generic.list import HybridListView
@@ -46,18 +48,32 @@ notice_detail = login_required(NotificationDetailView.as_view())
 
 
 def mark_all_as_read(request):
-    # notification_views.mark_all_as_read(request)
-    # return redirect('account:notifications:all')
-    pass
+    for messages in request.user.get_messages.filter(unseen=True):
+        message.unseen = False
+        message.save()
+    return HttpResponseRedirect(reverse('account:notifications:list'))
 
+
+def delete(request, slug=None):
+    message = get_object_or_404(Notice, slug=slug, recipient=request.user)
+    message.delete()
+    return HttpResponseRedirect(reverse('account:notifications:list'))
+
+
+def archive(request, slug=None):
+    message = get_object_or_404(Notice, slug=slug, recipient=request.user)
+    message.archive()
+    return HttpResponseRedirect(reverse('account:notifications:list'))
 
 def mark_as_read(request, slug=None):
-    # notification_views.mark_as_read(request, slug)
-    # return redirect('account:notifications:all')
-    pass
+    message = get_object_or_404(Notice, slug=slug, recipient=request.user)
+    message.unseen = False
+    message.save()
+    return HttpResponseRedirect(reverse('account:notifications:list'))
 
 
-def mark_as_read(request, slug=None):
-    # notification_views.mark_as_unread(request, slug)
-    # return redirect('account:notifications:all')
-    pass
+def mark_as_unread(request, slug=None):
+    message = get_object_or_404(Notice, slug=slug, recipient=request.user)
+    message.unseen = True
+    message.save()
+    return HttpResponseRedirect(reverse('account:notifications:list'))

@@ -27,9 +27,13 @@ urlpatterns = patterns('',
                 # /account/notifications/{slug}/
                 url(r'^$', views.notifications.notice_detail, name='detail'),
                 # /account/notifications/{slug}/mark_as_read/
-                url(r'^mark_as_read$', placeholder_view, name='mark_as_read'),
+                url(r'^mark_as_read$', views.notifications.mark_as_read, name='mark_as_read'),
                 # /account/notifications/{slug}/mark_as_unread/
-                url(r'^mark_as_unread$', placeholder_view, name='mark_as_unread'),
+                url(r'^mark_as_unread$', views.notifications.mark_as_unread, name='mark_as_unread'),
+                # /account/notifications/{slug}/delete/
+                url(r'^delete$', views.notifications.delete, name='delete'),
+                # /account/notifications/{slug}/archive/
+                url(r'^archive$', views.notifications.archive, name='archive'),
             ))),
         ), namespace='notifications', app_name='notifications')),
 
