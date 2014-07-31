@@ -14,7 +14,7 @@ class NotificationListView(HybridListView):
     page_title = 'Messages'
 
     def get_queryset(self):
-        return self.model.objects.notices_for(self.request.user, on_site=True)
+        return self.request.user.get_messages()
 
 
 class NotificationDetailView(HybridDetailView):

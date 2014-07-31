@@ -93,6 +93,10 @@ class Person(AbstractUser):
         else:
             return False
 
+    def get_messages(self):
+        from notification.models import Notice
+        return Notice.objects.notices_for(self, on_site=True)
+
     @models.permalink
     def get_absolute_url(self):
         return ('people:person:detail', [self.username])

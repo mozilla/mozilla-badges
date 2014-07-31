@@ -20,7 +20,7 @@ def time_since(otherdate=None, offset=None, now=None, fuzzy=True, format='%A, %Y
         return tuple([words[number] if number <= 10 else number for number in numbers])
 
     def pluralize(*numbers):
-        data = [(number, '' if number == 1 else 's') for number in numbers]
+        data = [(number, '' if (number == 1 or number == 'one') else 's') for number in numbers]
         print numbers, data, [item for sublist in data for item in sublist]
         return tuple([item for sublist in data for item in sublist])
 
@@ -57,14 +57,14 @@ def time_since(otherdate=None, offset=None, now=None, fuzzy=True, format='%A, %Y
         if fuzzy:
             if delta_m >= 30:
                 delta_h += 1
-            return "%s hours ago" % pluralize(*humanize(delta_h))
+            return "%s hour%s ago" % pluralize(*humanize(delta_h))
         else:
             return "%s hour%s %s minute%s ago" % pluralize(delta_h, delta_m)
 
     if delta_m > 0:
         if fuzzy:
             if delta_m >= 45:
-                return '1 hour ago'
+                return 'one hour ago'
 
             if delta_m >= 25:
                 return 'half an hour ago'

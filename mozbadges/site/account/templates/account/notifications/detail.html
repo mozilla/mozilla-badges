@@ -3,6 +3,7 @@
 {% set TITLE = notification.notice_type.display %}
 
 {% block content %}
+    {{ notification.message }}
     {% if previous %}
         <a href="{{ previous.get_absolute_url() }}">Previous</a>
     {% endif %}
