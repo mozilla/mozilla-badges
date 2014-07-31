@@ -149,3 +149,4 @@ def username_algo(email):
 BROWSERID_USERNAME_ALGO = username_algo
 
 NOTIFICATIONS_PATH_NAME = 'account:notifications:list'
+NOTIFICATIONS_DETAIL_PATH_NAME = 'account:notifications:detail'

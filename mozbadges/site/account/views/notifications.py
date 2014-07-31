@@ -19,7 +19,7 @@ class NotificationListView(HybridListView):
 
 class NotificationDetailView(HybridDetailView):
     model = Notice
-    template_name = 'account/notifications/single.html'
+    template_name = 'account/notifications/detail.html'
     context_object_name = 'notification'
     slug_field = 'slug'
     slug_url_kwarg = 'slug'
@@ -32,23 +32,14 @@ class NotificationDetailView(HybridDetailView):
 
     def get_context_data(self, **kwargs):
         context = super(NotificationDetailView, self).get_context_data(**kwargs)
-        try:
-            context['previous'] = self.model.objects\
-                                    .filter(added__lt=self.object.added)\
-                                    .order_by('-added')\
-                                    .values_list('slug', flat=True)\
-                                    [0]
-        except IndexError:
-            context['previous'] = None
-        try:
-            context['next'] = self.model.objects\
-                                    .filter(added__gt=self.object.added)\
-                                    .order_by('added')\
-                                    .values_list('slug', flat=True)\
-                                    [0]
-        except IndexError:
-            context['next'] = None
+        context['previous'] = self.object.get_previous()
+        context['next'] = self.object.get_next()
         return context
+
+    def get_queryset(self):
+        qs = super(NotificationDetailView, self).get_queryset()
+        return qs.filter(recipient=self.request.user)
+
 
 notice_list = login_required(NotificationListView.as_view())
 notice_detail = login_required(NotificationDetailView.as_view())

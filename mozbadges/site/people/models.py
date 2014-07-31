@@ -6,7 +6,6 @@ from mozbadges.compat import _
 from mozbadges.mozillians import api as mozillians
 from mozbadges.utils.decorators import public_attributes
 
-
 MAX_USERNAME_CHANGES = getattr(settings, 'PROFILE_MAX_USERNAME_CHANGES', 3)
 
 
@@ -82,6 +81,17 @@ class Person(AbstractUser):
     def is_vouched(self):
         profile = self.get_mozillians_profile() or {}
         return profile.get('is_vouched', False)
+
+    def notify(self, notice_type, extra_content=None, sender=None, **kwargs):
+        from notification import models as notification
+
+        if extra_content is None:
+            extra_content = kwargs
+
+        if notification:
+            notification.send([self], notice_type, extra_content, on_site=True, sender=sender)
+        else:
+            return False
 
     @models.permalink
     def get_absolute_url(self):

@@ -4,9 +4,9 @@
 
 {% block content %}
     {% if previous %}
-        <a href="{{ url('account:notifications:detail', previous) }}">Previous</a>
+        <a href="{{ previous.get_absolute_url() }}">Previous</a>
     {% endif %}
     {% if next %}
-        <a href="{{ url('account:notifications:detail', next) }}">Next</a>
+        <a href="{{ next.get_absolute_url() }}">Next</a>
     {% endif %}
 {% endblock content %}
