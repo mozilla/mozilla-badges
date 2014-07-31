@@ -27,12 +27,15 @@ INSTALLED_APPS = list(INSTALLED_APPS) + [
     '%s.site.people' % PROJECT_MODULE,
     '%s.site.teams' % PROJECT_MODULE,
 
+    'django.contrib.sites',
     'south',
     'django.contrib.admin',
     'notification',
     'constance',
     'constance.backends.database',
 ]
+
+SITE_ID = 1
 
 # Note! If you intend to add `south` to INSTALLED_APPS,
 # make sure it comes BEFORE `django_nose`.
@@ -144,3 +147,5 @@ def username_algo(email):
     return generate_username(email)
 
 BROWSERID_USERNAME_ALGO = username_algo
+
+NOTIFICATIONS_PATH_NAME = 'account:notifications:list'
