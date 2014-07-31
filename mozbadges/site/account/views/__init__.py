@@ -21,9 +21,7 @@ class WelcomeView(ContextMixin, UpdateView):
     page_title = 'Welcome'
 
     def get(self, request, *args, **kwargs):
-        if request.user.is_new:
-            request.user.notify('welcome')
-        else:
+        if not request.user.is_new:
             next = request.REQUEST.get(REDIRECT_FIELD_NAME, self.success_url)
             return redirect(resolve_url(next))
 

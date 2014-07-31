@@ -1,6 +1,8 @@
 from django.conf import settings
+from django.db.models.signals import post_save
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.dispatch import receiver
 
 from mozbadges.compat import _
 from mozbadges.mozillians import api as mozillians
@@ -82,7 +84,7 @@ class Person(AbstractUser):
         profile = self.get_mozillians_profile() or {}
         return profile.get('is_vouched', False)
 
-    def notify(self, notice_type, extra_content=None, sender=None, **kwargs):
+    def send_message(self, notice_type, extra_content=None, sender=None, **kwargs):
         from mozbadges import notices
 
         if extra_content is None:
@@ -113,3 +115,9 @@ class Person(AbstractUser):
     @models.permalink
     def get_json_url(self):
         return ('people:person:json', [self.username])
+
+
+@receiver(post_save, sender=Person)
+def _welcome_new_user(**kwargs):
+    if kwargs.get('created', False):
+        kwargs['instance'].send_message('welcome')
