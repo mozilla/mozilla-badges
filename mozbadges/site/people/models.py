@@ -83,19 +83,28 @@ class Person(AbstractUser):
         return profile.get('is_vouched', False)
 
     def notify(self, notice_type, extra_content=None, sender=None, **kwargs):
-        from notification import models as notification
+        from mozbadges import notices
 
         if extra_content is None:
             extra_content = kwargs
 
-        if notification:
-            notification.send([self], notice_type, extra_content, on_site=True, sender=sender)
-        else:
-            return False
+        return notices.send([self], notice_type, extra_content, on_site=True, sender=sender)
 
     def get_messages(self):
         from notification.models import Notice
         return Notice.objects.notices_for(self, on_site=True)
+
+    def observe(self, observed, signal='post_save'):
+        from mozbadges import notices
+        return notices.observe(observed, self, signal)
+
+    def stop_observing(self, observed, signal='post_save'):
+        from mozbadges import notices
+        return notices.stop_observing(observed, self, signal)
+
+    def is_observing(self, observed, signal='post_save'):
+        from mozbadges import notices
+        return notices.is_observing(observed, self, signal)
 
     @models.permalink
     def get_absolute_url(self):
