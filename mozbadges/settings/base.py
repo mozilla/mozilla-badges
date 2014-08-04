@@ -14,6 +14,7 @@ ROOT_URLCONF = '%s.urls' % PROJECT_MODULE
 
 TEMPLATE_CONTEXT_PROCESSORS = list(TEMPLATE_CONTEXT_PROCESSORS) + [
     'constance.context_processors.config',
+    'notification.context_processors.notification',
 ]
 
 INSTALLED_APPS = list(INSTALLED_APPS) + [
@@ -26,11 +27,15 @@ INSTALLED_APPS = list(INSTALLED_APPS) + [
     '%s.site.people' % PROJECT_MODULE,
     '%s.site.teams' % PROJECT_MODULE,
 
+    'django.contrib.sites',
     'south',
     'django.contrib.admin',
+    'notification',
     'constance',
     'constance.backends.database',
 ]
+
+SITE_ID = 1
 
 # Note! If you intend to add `south` to INSTALLED_APPS,
 # make sure it comes BEFORE `django_nose`.
@@ -63,10 +68,6 @@ LOGIN_REDIRECT_URL = 'account:welcome'
 LOGIN_REDIRECT_URL_FAILURE = '/'
 
 BROWSERID_VERIFY_CLASS = 'mozbadges.auth.views.Verify'
-
-TEMPLATE_CONTEXT_PROCESSORS += (
-    # other possible context processors here...
-)
 
 AUTH_USER_MODEL = 'people.Person'
 
@@ -146,3 +147,6 @@ def username_algo(email):
     return generate_username(email)
 
 BROWSERID_USERNAME_ALGO = username_algo
+
+NOTIFICATIONS_PATH_NAME = 'account:notifications:list'
+NOTIFICATIONS_DETAIL_PATH_NAME = 'account:notifications:detail'

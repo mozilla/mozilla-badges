@@ -1,7 +1,14 @@
 from jingo import register as jingo_register
 from django_browserid.helpers import browserid_button, browserid_info
 
+from mozbadges import utils
 from mozbadges.compat import _lazy as _, reverse
+
+
+@jingo_register.function
+def time_since(*args, **kwargs):
+    return utils.time_since(*args, **kwargs)
+
 
 @jingo_register.function
 def persona_info():

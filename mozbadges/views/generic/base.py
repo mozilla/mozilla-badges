@@ -86,9 +86,9 @@ class ContextMixin(object):
         if 'page_title' not in context:
             if hasattr(self, 'page_title'):
                 context['page_title'] = self.page_title
-            elif hasattr(self, 'model'):
+            elif hasattr(self, 'model') and self.model is not None:
                 context['page_title'] = capfirst(self.model._meta.verbose_name_plural)
-            elif hasattr(self, 'object'):
+            elif hasattr(self, 'object') and self.object is not None:
                 context['page_title'] = unicode(self.object)
 
         context.update(super(ContextMixin, self).get_context_data(**kwargs))

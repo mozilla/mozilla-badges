@@ -5,9 +5,11 @@ from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import redirect, resolve_url
 from django.views.generic.edit import UpdateView
 
-from forms import WelcomeForm, EditProfileForm
+from mozbadges.site.account.forms import WelcomeForm, EditProfileForm
 from mozbadges.site.people.models import Person
 from mozbadges.views.generic.base import ContextMixin
+
+import notifications
 
 
 class WelcomeView(ContextMixin, UpdateView):
@@ -19,9 +21,9 @@ class WelcomeView(ContextMixin, UpdateView):
     page_title = 'Welcome'
 
     def get(self, request, *args, **kwargs):
-        # if not request.user.is_new:
-        #     next = request.REQUEST.get(REDIRECT_FIELD_NAME, self.success_url)
-        #     return redirect(resolve_url(next))
+        if not request.user.is_new:
+            next = request.REQUEST.get(REDIRECT_FIELD_NAME, self.success_url)
+            return redirect(resolve_url(next))
 
         request.user.is_new = False
         request.user.save()

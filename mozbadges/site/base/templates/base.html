@@ -84,6 +84,17 @@
                                                                                 {%- block userbar_loggedin -%}
                                                                                     <a class="signed-in-user{% if request.user.is_vouched() %} vouched-user{% endif %}" data-id="{{ request.user.email }}" href="{{ url('account:dashboard') }}">
                                                                                         <img src="{{ request.user.get_avatar(static('img/default-avatar.jpg')) }}" class="avatar" alt="">{{ request.user }}</a>
+                                                                                    {% if notice_unseen_count == 0 %}
+                                                                                        <a class="notices no-notices" aria-label="{{ _('No new messages') }}" title="Messages" href="{{ url('account:notifications:list') }}"><i class="fa fa-bell"></i></a>
+                                                                                    {% else %}
+                                                                                        <a class="notices" aria-label="
+                                                                                            {%- if notice_unseen_count == 1 -%}
+                                                                                                {{ _('{count} new message') | fe(count=notice_unseen_count) }}
+                                                                                            {%- else -%}
+                                                                                                {{ _('{count} new messages') | fe(count=notice_unseen_count) }}
+                                                                                            {%- endif -%}
+                                                                                        " title="Messages" href="{{ url('account:notifications:list') }}"><i class="fa fa-bell"></i></a>
+                                                                                    {% endif %}
                                                                                     | {{ persona_logout() }}
                                                                                 {%- endblock userbar_loggedin -%}
                                                                             {%- else -%}

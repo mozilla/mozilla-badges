@@ -1,0 +1,9 @@
+{% extends "account/base.html" %}
+
+{% set BASE_NOTIFICATION_CRUMBS = [(_('Messages'), url('account:notifications:list'))] %}
+
+{% if CRUMBS %}
+    {% set CRUMBS = BASE_NOTIFICATION_CRUMBS + CRUMBS %}
+{% else %}
+    {% set CRUMBS = BASE_NOTIFICATION_CRUMBS %}
+{% endif %}

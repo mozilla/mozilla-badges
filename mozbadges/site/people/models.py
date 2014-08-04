@@ -1,11 +1,12 @@
 from django.conf import settings
+from django.db.models.signals import post_save
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.dispatch import receiver
 
 from mozbadges.compat import _
 from mozbadges.mozillians import api as mozillians
 from mozbadges.utils.decorators import public_attributes
-
 
 MAX_USERNAME_CHANGES = getattr(settings, 'PROFILE_MAX_USERNAME_CHANGES', 3)
 
@@ -83,6 +84,30 @@ class Person(AbstractUser):
         profile = self.get_mozillians_profile() or {}
         return profile.get('is_vouched', False)
 
+    def send_message(self, notice_type, extra_content=None, sender=None, **kwargs):
+        from mozbadges import notices
+
+        if extra_content is None:
+            extra_content = kwargs
+
+        return notices.send([self], notice_type, extra_content, on_site=True, sender=sender)
+
+    def get_messages(self):
+        from notification.models import Notice
+        return Notice.objects.notices_for(self, on_site=True)
+
+    def observe(self, observed, signal='post_save'):
+        from mozbadges import notices
+        return notices.observe(observed, self, signal)
+
+    def stop_observing(self, observed, signal='post_save'):
+        from mozbadges import notices
+        return notices.stop_observing(observed, self, signal)
+
+    def is_observing(self, observed, signal='post_save'):
+        from mozbadges import notices
+        return notices.is_observing(observed, self, signal)
+
     @models.permalink
     def get_absolute_url(self):
         return ('people:person:detail', [self.username])
@@ -90,3 +115,9 @@ class Person(AbstractUser):
     @models.permalink
     def get_json_url(self):
         return ('people:person:json', [self.username])
+
+
+@receiver(post_save, sender=Person)
+def _welcome_new_user(**kwargs):
+    if kwargs.get('created', False):
+        kwargs['instance'].send_message('welcome')

@@ -18,13 +18,23 @@ urlpatterns = patterns('',
         # /account/settings/
         url(r'^settings/$', placeholder_view, name='settings'),
 
-        (r'^notifications/', include(patterns('',
+        (r'^messages/', include(patterns('',
             # /account/notifications/
-            url(r'^$', placeholder_view, name='all'),
-            # /account/notifications/mark_as_read/
-            url(r'^mark_as_read/$', placeholder_view, name='mark_as_read'),
-            # /account/notifications/{notification}/
-            url(r'^(?P<notification>[a-z0-9]+)/$', placeholder_view, name='detail'),
+            url(r'^$', views.notifications.notice_list, name='list'),
+            # /account/notifications/mark_all_as_read/
+            url(r'^mark_all_as_read$', placeholder_view, name='mark_all_as_read'),
+            (r'^(?P<slug>[a-z0-9]{8})/', include(patterns('',
+                # /account/notifications/{slug}/
+                url(r'^$', views.notifications.notice_detail, name='detail'),
+                # /account/notifications/{slug}/mark_as_read/
+                url(r'^mark_as_read$', views.notifications.mark_as_read, name='mark_as_read'),
+                # /account/notifications/{slug}/mark_as_unread/
+                url(r'^mark_as_unread$', views.notifications.mark_as_unread, name='mark_as_unread'),
+                # /account/notifications/{slug}/delete/
+                url(r'^delete$', views.notifications.delete, name='delete'),
+                # /account/notifications/{slug}/archive/
+                url(r'^archive$', views.notifications.archive, name='archive'),
+            ))),
         ), namespace='notifications', app_name='notifications')),
 
         (r'^keys/', include(patterns('',

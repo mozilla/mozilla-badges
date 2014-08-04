@@ -1,0 +1,13 @@
+{% extends "account/notifications/base.html" %}
+
+{% set TITLE = notification.notice_type.display %}
+
+{% block content %}
+    {{ notification.message }}
+    {% if previous %}
+        <a href="{{ previous.get_absolute_url() }}">Previous</a>
+    {% endif %}
+    {% if next %}
+        <a href="{{ next.get_absolute_url() }}">Next</a>
+    {% endif %}
+{% endblock content %}
