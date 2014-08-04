@@ -1,3 +1,6 @@
 [submodule "vendor"]
 	path = vendor
 	url = git://github.com/mozilla/playdoh-lib.git
+[submodule "vendor-local/src/django-valet-keys"]
+	path = vendor-local/src/django-valet-keys
+	url = git://github.com/lmorchard/django-valet-keys.git
