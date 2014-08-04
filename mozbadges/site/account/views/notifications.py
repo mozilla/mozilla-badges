@@ -65,6 +65,7 @@ def archive(request, slug=None):
     message.archive()
     return HttpResponseRedirect(reverse('account:notifications:list'))
 
+
 def mark_as_read(request, slug=None):
     message = get_object_or_404(Notice, slug=slug, recipient=request.user)
     message.unseen = False
