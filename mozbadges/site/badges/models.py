@@ -42,8 +42,11 @@ class Badge (ROAModel):
         return BadgeSerializer
 
     @staticmethod
-    def get_resource_url_list ():
-        return badgekit_url('/badges')
+    def get_resource_url_list (**kwargs): 
+        if 'team' in kwargs:
+            return badgekit_url('/issuer/{team}/badges', **kwargs)
+        else:
+            return badgekit_url('/badges')
 
     def get_resource_url_detail (self):
         return u"%s/%s" % (self.get_resource_url_list(), self.pk)
