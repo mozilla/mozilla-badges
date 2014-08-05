@@ -22,6 +22,7 @@ INSTALLED_APPS = list(INSTALLED_APPS) + [
     'django_roa',
     
     '%s.site.account' % PROJECT_MODULE,
+    '%s.site.awards' % PROJECT_MODULE,
     '%s.site.badges' % PROJECT_MODULE,
     '%s.site.base' % PROJECT_MODULE,
     '%s.site.people' % PROJECT_MODULE,

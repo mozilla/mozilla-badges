@@ -3,6 +3,10 @@
 {% set TITLE = badge %}
 
 {% block content %}
-    <img src="{{ badge.imageUrl }}">
-    <p>Description: {{ badge.earnerDescription }}</p>
+    <div>
+        <h1>{{ badge.name }}</h1>
+        <img src="{{ badge.imageUrl }}">
+        <p>Description: {{ badge.earnerDescription }}</p>
+        <a href="{{ badge.get_awards_absolute_url() }}">See awarded badges</a>
+    </div>
 {% endblock content %}

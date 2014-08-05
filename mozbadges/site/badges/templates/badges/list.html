@@ -3,9 +3,11 @@
 {% set TITLE = _('Badges') %}
 
 {% block content %}
-    <ul>
-        {% for badge in object_list %}
-            <li><a href="{{ badge.get_absolute_url() }}">{{ badge.name }}</a>  - {{ badge.strapline }}</li>
-        {% endfor %}
-    </ul>
+    <div>
+        <ul>
+            {% for badge in object_list %}
+                <li><a href="{{ badge.get_absolute_url() }}">{{ badge.name }}</a>  - {{ badge.strapline }}</li>
+            {% endfor %}
+        </ul>
+    </div>
 {% endblock content %}
