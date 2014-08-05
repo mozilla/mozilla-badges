@@ -1,8 +1,7 @@
 from django.db import models
-from urlparse import urljoin
-from django.conf import settings
 from django_roa import Model as ROAModel
 from rest_framework import serializers
+from mozbadges.utils.badgekit import badgekit_url
 
 class Badge (ROAModel):
     timeUnitChoices = (
@@ -43,8 +42,8 @@ class Badge (ROAModel):
         return BadgeSerializer
 
     @staticmethod
-    def get_resource_url_list (): 
-        return urljoin(settings.BADGEKIT_API_ENDPOINT, '/systems/' + settings.BADGEKIT_API_SYSTEM + '/badges')
+    def get_resource_url_list ():
+        return badgekit_url('/badges')
 
     def get_resource_url_detail (self):
         return u"%s/%s" % (self.get_resource_url_list(), self.pk)

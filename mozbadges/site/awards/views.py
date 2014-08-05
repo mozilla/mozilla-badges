@@ -22,9 +22,9 @@ class BadgeAwardListView(HybridListView):
 
     def get_queryset(self):
         if 'badge' in self.kwargs:
-          return Award.objects.filter(badge=self.kwargs['badge'])
+            return Award.objects.filter(badge=self.kwargs['badge'])
         elif 'person' in self.kwargs:
-          return Award.objects.filter(person=self.kwargs['person'])
+            return Award.objects.filter(person=self.kwargs['person'])
 
 
 award_detail = AwardDetailView.as_view()

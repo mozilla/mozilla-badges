@@ -1,8 +1,7 @@
 from django.db import models
-from urlparse import urljoin
-from django.conf import settings
 from django_roa import Model as ROAModel
 from rest_framework import serializers
+from mozbadges.utils.badgekit import badgekit_url
 
 from ..badges.models import Badge, BadgeSerializer
 from ..people.models import Person
@@ -17,6 +16,10 @@ class Award (ROAModel):
 
     result_field_names = ['instance', 'instances']
 
+    @property
+    def person(self):
+        return Person.objects.get(email=self.email)
+
     @staticmethod
     def serializer():
         return AwardSerializer
@@ -24,10 +27,10 @@ class Award (ROAModel):
     @staticmethod
     def get_resource_url_list (**kwargs):
         if 'badge' in kwargs:
-          return urljoin(settings.BADGEKIT_API_ENDPOINT, '/systems/' + settings.BADGEKIT_API_SYSTEM + '/badges/' + kwargs['badge'] + '/instances')
+            return badgekit_url('/badges/{badge}/instances', **kwargs)
         elif 'person' in kwargs:
-          person = Person.objects.get(username=kwargs['person'])
-          return urljoin(settings.BADGEKIT_API_ENDPOINT, '/systems/' + settings.BADGEKIT_API_SYSTEM + '/instances/' + person.email)
+            person = Person.objects.get(username=kwargs['person'])
+            return badgekit_url('/instances/{0}', person.email)
 
     def get_resource_url_detail (self):
         return u"%s/%s" % (self.get_resource_url_list(), self.pk)
