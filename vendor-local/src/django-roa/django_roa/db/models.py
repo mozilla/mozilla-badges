@@ -452,7 +452,7 @@ class ROAModel(models.Model):
 
             # Construct Json payload
             serializer = self.get_serializer(self)
-            payload = serializer.data
+            payload = self.get_renderer().render(serializer.data)
 
             # Add serializer content_type
             headers = get_roa_headers()
@@ -483,8 +483,7 @@ class ROAModel(models.Model):
                                   force_unicode(resource.uri),
                                   force_unicode(payload),
                                   force_unicode(get_args)))
-                    response = resource.put(payload=self.get_renderer().render(payload),
-                                            headers=headers, **get_args)
+                    response = resource.put(payload=payload, headers=headers, **get_args)
                 except RequestFailed as e:
                     raise ROAException(e)
             else:
@@ -497,8 +496,7 @@ class ROAModel(models.Model):
                                   force_unicode(resource.uri),
                                   force_unicode(payload),
                                   force_unicode(get_args)))
-                    response = resource.post(payload=self.get_renderer().render(payload),
-                                             headers=headers, **get_args)
+                    response = resource.post(payload=payload, headers=headers, **get_args)
                 except RequestFailed as e:
                     raise ROAException(e)
 
