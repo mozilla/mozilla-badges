@@ -1,0 +1,9 @@
+{% extends "account/base.html" %}
+
+{% block content %}
+<p><a href="{{ request.user.get_absolute_url() }}">View profile</a></p>
+<p><a href="{{ url('account:edit') }}">Edit profile</a></p>
+<p><a href="{{ url('account:settings') }}">Settings</a></p>
+<p><a href="{{ url('account:keys:list') }}">Valet Keys</a></p>
+<p><a href="{{ url('account:notifications:list') }}">Messages</a></p>
+{% endblock content %}

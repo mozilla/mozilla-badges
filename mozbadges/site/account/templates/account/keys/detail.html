@@ -1,0 +1,41 @@
+{% extends "account/keys/base.html" %}
+
+{% block content %}
+<blockquote><p>{{ key.description }}</p></blockquote>
+{% if actions %}
+    <table>
+        <thead>
+            <th>Action</th>
+            <td></td>
+        </thead>
+        {% for action in actions %}
+            <td>
+                {%- set url = action.content_object.get_absolute_url and action.content_object.get_absolute_url() -%}
+                {%- if url -%}
+                    <a href="{{ url }}">
+                        {{- action.notes -}}
+                    </a>
+                {%- else -%}
+                    {{ action.notes }}
+                {%- endif -%}
+            </td>
+            <td>
+                {{- time_since(action.created, fuzzy=False) -}}
+            </td>
+        {% endfor %}
+    </table>
+{% else %}
+    <p>{{ _('This key has not been used yet.') }}</p>
+{% endif %}
+
+<p>
+    {% if key.is_disabled %}
+        <a title="{{ _('Activate key') }}"
+           href="{{ url('account:keys:activate', key.slug) }}">{{ _('Activate') }}</a>
+    {% else %}
+        <a title="{{ _('Disable key') }}"
+           href="{{ url('account:keys:disable', key.slug) }}">{{ _('Disable') }}</a>
+    {% endif %}
+    <a href="{{ url('account:keys:delete', key.slug) }}">{{ _('Delete') }}</a>
+</p>
+{% endblock %}

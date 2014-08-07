@@ -1,0 +1,47 @@
+{% extends "account/keys/base.html" %}
+
+{% block content %}
+    <p>{% trans -%}
+        These are your API keys. They're useful for building applications that
+        perform tasks on Mozilla Badges on your behalf. If you have stopped using any of
+        them, or suspect one has been exposed to parties you don't trust with your
+        account, delete or disable the key. It's easy to create a replacement key at any time.
+    {%- endtrans %}</p>
+    <p><a class="button positive" href="{{ url('account:keys:new') }}">{{ _('Create a new key') }}</a></p>
+    {% if not keys %}
+        <p>You have no API keys, yet.</p>
+    {% else %}
+        <table class="keys">
+            <thead>
+                <tr>
+                    <th>{{ _('Key') }}</th>
+                    <th>{{ _('Created') }}</th>
+                    <td></td>
+                </tr>
+            </thead>
+            {% for key in keys %}
+                <tr id="key-{{ key.slug }}" class="key{% if key.is_disabled %} disabled{% endif %}">
+                    <td class="description">
+                        {{ key.description }}
+                    </td>
+                    <td class="created">{{ key.created }}</td>
+                    <td class="actions">
+                        <a title="{{ _('View key usage history') }}"
+                           href="{{ url('account:keys:detail', key.slug) }}">{{ _('History') }} ({{ key.history.count() }})</a>
+
+                        {% if key.is_disabled %}
+                            <a title="{{ _('Activate key') }}"
+                               href="{{ url('account:keys:activate', key.slug) }}">{{ _('Activate') }}</a>
+                        {% else %}
+                            <a title="{{ _('Disable key') }}"
+                               href="{{ url('account:keys:disable', key.slug) }}">{{ _('Disable') }}</a>
+                        {% endif %}
+
+                        <a title="{{ _('Delete key') }}"
+                           href="{{ url('account:keys:delete', key.slug) }}">{{ _('Delete') }}</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+{% endblock content %}

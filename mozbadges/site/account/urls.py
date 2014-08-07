@@ -7,7 +7,7 @@ import views
 urlpatterns = patterns('',
     (r'^account/', include(patterns('',
         # /account/
-        url(r'^$', placeholder_view, name='dashboard'),
+        url(r'^$', views.dashboard, name='dashboard'),
 
         # /account/welcome/
         url(r'^welcome/$', views.welcome, name='welcome'),
@@ -39,16 +39,20 @@ urlpatterns = patterns('',
 
         (r'^keys/', include(patterns('',
             # /keys/
-            url(r'^$', placeholder_view, name='all'),
+            url(r'^$', views.keys.key_list, name='list'),
             # /keys/new/
-            url(r'^new/$', placeholder_view, name='new'),
+            url(r'^new/$', views.keys.create, name='new'),
 
-            (r'^(?P<key>[a-z0-9]+)/', include(patterns('',
+            (r'^(?P<key>[a-z0-9]{8})/', include(patterns('',
                 # /keys/{key}/
-                url(r'^$', placeholder_view, name='detail'),
+                url(r'^$', views.keys.detail, name='detail'),
                 # /keys/{key}/disable/
-                url(r'^disable/$', placeholder_view, name='disable'),
-            ), namespace='key', app_name='key')),
+                url(r'^disable$', views.keys.disable, name='disable'),
+                # /keys/{key}/activate/
+                url(r'^activate$', views.keys.activate, name='activate'),
+                # /keys/{key}/delete/
+                url(r'^delete/$', views.keys.delete, name='delete'),
+            ))),
         ), namespace='keys', app_name='keys')),
     ), namespace='account', app_name='account')),
 )
