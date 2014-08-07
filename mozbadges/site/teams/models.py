@@ -5,12 +5,11 @@ from django_roa import Model as ROAModel
 from rest_framework import serializers
 
 class Team (ROAModel):
-    id = models.IntegerField()
     name = models.CharField(max_length=255)
     slug = models.CharField(max_length=255, primary_key=True)
     url = models.URLField()
     description = models.TextField(blank=True, null=True)
-    email = models.EmailField(blank=True, null=True)
+    email = models.EmailField()
     imageUrl = models.URLField(blank=True, null=True)
 
     result_field_names = ['issuer', 'issuers']
@@ -22,6 +21,10 @@ class Team (ROAModel):
     @staticmethod
     def get_resource_url_list (): 
         return urljoin(settings.BADGEKIT_API_ENDPOINT, '/systems/' + settings.BADGEKIT_API_SYSTEM + '/issuers')
+
+    @staticmethod
+    def get_resource_url_count ():
+        return Team.get_resource_url_list()
 
     def get_resource_url_detail (self):
         return u"%s/%s" % (self.get_resource_url_list(), self.pk)
@@ -40,4 +43,4 @@ class Team (ROAModel):
 class TeamSerializer(serializers.ModelSerializer):
     class Meta:
         model = Team
-        fields = ('id', 'name', 'slug', 'url', 'description', 'email', 'imageUrl')
+        fields = ('name', 'slug', 'url', 'description', 'email', 'imageUrl')
