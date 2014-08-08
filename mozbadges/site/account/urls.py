@@ -7,7 +7,7 @@ import views
 urlpatterns = patterns('',
     (r'^account/', include(patterns('',
         # /account/
-        url(r'^$', views.dashboard, name='dashboard'),
+        url(r'^$', placeholder_view, name='dashboard'),
 
         # /account/welcome/
         url(r'^welcome/$', views.welcome, name='welcome'),
