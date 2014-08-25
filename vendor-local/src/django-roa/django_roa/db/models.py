@@ -476,6 +476,7 @@ class ROAModel(models.Model):
                 record_exists = True
                 resource = Resource(self.get_resource_url_detail(),
                                     filters=ROA_FILTERS, **ROA_SSL_ARGS)
+
                 try:
                     logger.debug(u"""Modifying : "%s" through %s with payload "%s" and GET args "%s" """ % (
                                   force_unicode(self),
@@ -529,7 +530,7 @@ class ROAModel(models.Model):
         logger.debug(u"""Deleting  : "%s" through %s""" % \
             (unicode(self), unicode(resource.uri)))
 
-        result = resource.delete(**ROA_CUSTOM_ARGS)
+        result = resource.delete(headers={'Content-Type': 'application/json'}, **ROA_CUSTOM_ARGS)
         if result.status_int in [200, 202, 204]:
             self.pk = None
 
