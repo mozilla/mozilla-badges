@@ -1,6 +1,8 @@
 from django import http
+from django.contrib.auth import get_user_model
 from django.core.serializers.json import DjangoJSONEncoder
-from django.db.models import Model
+from django.db.models import Model, ForeignKey
+from django.utils.cache import patch_vary_headers
 from django.utils.text import capfirst
 from urllib import urlencode
 from urlparse import urlunparse
@@ -22,6 +24,37 @@ def cleanup_json(data):
     # Just `unicode` anything that can't otherwise be handled.
     # Solves the commonest problem of proxied translation strings, if nothing else.
     return unicode(data)
+
+
+class OwnerMixin(object):
+    def get_owner_field(self):
+        if not self.model:
+            return None
+
+        fields = self.model._meta.get_all_field_names()
+        owner_field = getattr(self, 'owner_field', 'user')
+
+        if owner_field in fields:
+            return owner_field
+
+        User = get_user_model()
+
+        for field_name in fields:
+            field = self.model._meta.get_field(field_name)
+            if isinstance(field, ForeignKey) and field.rel.to is User:
+                return field_name
+
+        return None
+
+    def get_queryset(self):
+        queryset = super(OwnerMixin, self).get_queryset()
+        owner_field = self.get_owner_field()
+
+        if owner_field is None:
+            return queryset
+
+        query = {owner_field: self.request.user}
+        return queryset.filter(**query)
 
 
 class JSONResponseMixin(object):
@@ -86,10 +119,10 @@ class ContextMixin(object):
         if 'page_title' not in context:
             if hasattr(self, 'page_title'):
                 context['page_title'] = self.page_title
-            elif hasattr(self, 'model') and self.model is not None:
-                context['page_title'] = capfirst(self.model._meta.verbose_name_plural)
             elif hasattr(self, 'object') and self.object is not None:
                 context['page_title'] = unicode(self.object)
+            elif hasattr(self, 'model') and self.model is not None:
+                context['page_title'] = capfirst(self.model._meta.verbose_name_plural)
 
         context.update(super(ContextMixin, self).get_context_data(**kwargs))
         return context

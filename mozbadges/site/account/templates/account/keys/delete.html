@@ -1,0 +1,11 @@
+{% extends "account/keys/base.html" %}
+
+{% block content %}
+<p>{{ key.description }}</p>
+<form action="" method="post">
+    {{ csrf() }}
+    <p>{{ _('Are you sure you want to delete this key? This action cannot be undone.') }}</p>
+    <button>{{ _('Yes, delete this key') }}</button>
+    <a href="{{ url('account:keys:detail', key.slug) }}">{{ _('Cancel') }}</a>
+</form>
+{% endblock %}

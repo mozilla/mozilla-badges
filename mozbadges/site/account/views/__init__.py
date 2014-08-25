@@ -10,6 +10,7 @@ from mozbadges.site.people.models import Person
 from mozbadges.views.generic.base import ContextMixin
 
 import notifications
+import keys
 
 
 class WelcomeView(ContextMixin, UpdateView):

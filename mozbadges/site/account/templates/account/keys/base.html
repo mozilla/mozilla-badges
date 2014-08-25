@@ -1,0 +1,9 @@
+{% extends "account/base.html" %}
+
+{% set BASE_KEYS_CRUMBS = [(_('Keys'), url('account:keys:list'))] %}
+
+{% if CRUMBS %}
+    {% set CRUMBS = BASE_KEYS_CRUMBS + CRUMBS %}
+{% else %}
+    {% set CRUMBS = BASE_KEYS_CRUMBS %}
+{% endif %}

@@ -17,6 +17,10 @@ TEMPLATE_CONTEXT_PROCESSORS = list(TEMPLATE_CONTEXT_PROCESSORS) + [
     'notification.context_processors.notification',
 ]
 
+MIDDLEWARE_CLASSES = list(MIDDLEWARE_CLASSES) + [
+    'valet_keys.middleware.ValetKeyMiddleware',
+]
+
 INSTALLED_APPS = list(INSTALLED_APPS) + [
     # Application base, containing global templates.
     'django_roa',
@@ -32,6 +36,7 @@ INSTALLED_APPS = list(INSTALLED_APPS) + [
     'south',
     'django.contrib.admin',
     'notification',
+    'valet_keys',
     'constance',
     'constance.backends.database',
 ]
